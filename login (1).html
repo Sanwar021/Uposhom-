@@ -1,0 +1,692 @@
+<!DOCTYPE html>
+<html lang="bn">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
+<meta name="apple-mobile-web-app-capable" content="yes">
+<title>Upasham Plus – Login</title>
+<link href="https://fonts.googleapis.com/css2?family=Hind+Siliguri:wght@300;400;500;600;700&family=Source+Sans+3:ital,wght@0,300;0,400;0,600;1,400&family=Playfair+Display:wght@600;700&display=swap" rel="stylesheet">
+<style>
+:root {
+  --teal:   #0f7e6b;
+  --teal-d: #0a5c4e;
+  --teal-l: #d4f7ef;
+  --teal-m: #1aaa8a;
+  --accent: #f0a500;
+  --bg:     #eef5f3;
+  --card:   #ffffff;
+  --border: #c6e3da;
+  --text:   #1a2e2a;
+  --muted:  #5a7a72;
+  --danger: #c62828;
+}
+*, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; -webkit-tap-highlight-color: transparent; }
+html, body {
+  min-height: 100%;
+  background: var(--bg);
+  color: var(--text);
+  font-family: 'Hind Siliguri', 'Source Sans 3', sans-serif;
+}
+
+/* ── TOPBAR ── */
+.topbar {
+  background: linear-gradient(135deg, var(--teal-d), var(--teal) 55%, var(--teal-m));
+  color: #fff;
+  padding: 10px 16px;
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  position: sticky;
+  top: 0;
+  z-index: 100;
+  box-shadow: 0 3px 14px rgba(0,0,0,.2);
+}
+.tbar-left { display: flex; align-items: center; gap: 10px; }
+.tbar-emblem {
+  width: 38px; height: 38px;
+  background: rgba(255,255,255,.15);
+  border: 1.5px solid rgba(255,255,255,.35);
+  border-radius: 10px;
+  display: flex; align-items: center; justify-content: center;
+  font-size: 1.3rem;
+}
+.tbar-brand strong { display: block; font-size: 1rem; font-family: 'Playfair Display', serif; font-weight: 700; line-height: 1.2; }
+.tbar-brand span   { font-size: .6rem; opacity: .8; text-transform: uppercase; letter-spacing: .8px; }
+.tbar-pill {
+  background: rgba(255,255,255,.18);
+  border: 1.5px solid rgba(255,255,255,.3);
+  border-radius: 20px;
+  padding: 4px 12px;
+  font-size: .68rem;
+  font-weight: 600;
+}
+
+/* ── PAGE ── */
+.page {
+  min-height: calc(100vh - 58px);
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  padding: 28px 14px 52px;
+}
+.page::before {
+  content: '';
+  position: fixed; inset: 0;
+  background:
+    radial-gradient(circle at 18% 22%, rgba(26,170,138,.09) 0%, transparent 52%),
+    radial-gradient(circle at 82% 78%, rgba(15,126,107,.07) 0%, transparent 50%);
+  pointer-events: none;
+  z-index: 0;
+}
+
+/* ── HERO ── */
+.hero {
+  text-align: center;
+  margin-bottom: 22px;
+  position: relative;
+  z-index: 1;
+}
+.hero-mark {
+  width: 66px; height: 66px;
+  background: linear-gradient(135deg, var(--teal-d), var(--teal-m));
+  border-radius: 18px;
+  margin: 0 auto 13px;
+  display: flex; align-items: center; justify-content: center;
+  font-size: 1.9rem;
+  box-shadow: 0 6px 24px rgba(15,126,107,.28);
+  border: 2.5px solid rgba(255,255,255,.45);
+}
+.hero h1 { font-family: 'Playfair Display', serif; font-size: 1.42rem; color: var(--teal-d); font-weight: 700; line-height: 1.25; }
+.hero p  { margin-top: 5px; font-size: .78rem; color: var(--muted); font-family: 'Source Sans 3', sans-serif; }
+
+/* ── CARD ── */
+.card {
+  background: var(--card);
+  border-radius: 18px;
+  border: 1.5px solid var(--border);
+  box-shadow: 0 10px 44px rgba(15,126,107,.15);
+  width: 100%;
+  max-width: 420px;
+  overflow: hidden;
+  position: relative;
+  z-index: 1;
+}
+.card::before {
+  content: '';
+  display: block;
+  height: 4px;
+  background: linear-gradient(90deg, var(--teal-d), var(--teal-m) 60%, var(--accent));
+}
+
+/* ── TABS ── */
+.tabs { display: flex; background: #f2faf7; border-bottom: 1.5px solid var(--border); }
+.tab {
+  flex: 1; padding: 13px 6px; border: none; background: transparent;
+  cursor: pointer; font-family: 'Hind Siliguri', sans-serif;
+  font-size: .84rem; font-weight: 600; color: var(--muted);
+  display: flex; align-items: center; justify-content: center;
+  gap: 7px; position: relative; transition: color .18s, background .18s;
+}
+.tab .ico { font-size: 1.05rem; }
+.tab::after {
+  content: ''; position: absolute;
+  bottom: -1.5px; left: 10%; right: 10%;
+  height: 2.5px; border-radius: 2px 2px 0 0;
+  background: var(--teal);
+  transform: scaleX(0);
+  transition: transform .2s cubic-bezier(.34,1.56,.64,1);
+}
+.tab.active { color: var(--teal-d); background: #fff; }
+.tab.active::after { transform: scaleX(1); }
+.tab:hover:not(.active) { background: var(--teal-l); color: var(--teal-d); }
+
+/* ── PANELS ── */
+.panel { display: none; padding: 22px 22px 26px; animation: slideUp .22s ease; }
+.panel.active { display: block; }
+@keyframes slideUp {
+  from { opacity: 0; transform: translateY(7px); }
+  to   { opacity: 1; transform: translateY(0); }
+}
+
+/* role badge */
+.role-badge { display: flex; align-items: center; gap: 10px; padding: 11px 14px; border-radius: 11px; margin-bottom: 18px; }
+.role-badge.doctor { background: var(--teal-l); border: 1.5px solid #9fd9cb; }
+.role-badge.staff  { background: #fff8e6;       border: 1.5px solid #f5d882; }
+.role-badge-icon   { font-size: 1.5rem; }
+.role-badge-text strong { display: block; font-size: .88rem; color: var(--teal-d); font-weight: 700; }
+.role-badge.staff .role-badge-text strong { color: #7a5500; }
+.role-badge-text span { font-size: .71rem; color: var(--muted); font-family: 'Source Sans 3', sans-serif; }
+
+/* section label */
+.sec-label {
+  font-size: .67rem; font-weight: 700; text-transform: uppercase;
+  letter-spacing: 1px; color: var(--teal); margin-bottom: 10px;
+  display: flex; align-items: center; gap: 7px;
+}
+.sec-label::after { content: ''; flex: 1; height: 1.5px; background: linear-gradient(90deg, var(--border), transparent); }
+
+/* ── FIELDS ── */
+.field { display: flex; flex-direction: column; gap: 4px; margin-bottom: 11px; }
+label.lbl { font-size: .69rem; font-weight: 700; color: var(--muted); letter-spacing: .3px; display: flex; align-items: center; gap: 5px; }
+.opt { font-size: .6rem; background: #eef0ef; color: var(--muted); padding: 1px 6px; border-radius: 4px; text-transform: uppercase; letter-spacing: .4px; font-weight: 600; }
+
+input[type="text"],
+input[type="email"],
+input[type="password"] {
+  font-family: 'Hind Siliguri', 'Source Sans 3', sans-serif;
+  font-size: .92rem; padding: 9px 12px;
+  border: 1.5px solid var(--border); border-radius: 10px;
+  color: var(--text); background: #fafffe; outline: none; width: 100%;
+  transition: border-color .15s, box-shadow .15s;
+}
+input:focus { border-color: var(--teal-m); box-shadow: 0 0 0 3px rgba(26,170,138,.1); }
+input.err   { border-color: var(--danger) !important; box-shadow: 0 0 0 3px rgba(198,40,40,.08) !important; }
+input::placeholder { color: #aabcb7; }
+
+.pw-wrap { position: relative; }
+.pw-wrap input { padding-right: 42px; }
+.eye {
+  position: absolute; right: 10px; top: 50%;
+  transform: translateY(-50%);
+  background: none; border: none; cursor: pointer;
+  color: var(--muted); font-size: .95rem;
+  padding: 3px 5px; border-radius: 5px; line-height: 1;
+  transition: color .15s, background .15s;
+}
+.eye:hover { color: var(--teal); background: var(--teal-l); }
+
+.vmsg { font-size: .68rem; color: var(--danger); display: none; align-items: center; gap: 3px; font-family: 'Source Sans 3', sans-serif; margin-top: 2px; }
+.vmsg.show { display: flex; }
+
+.meta-row { display: flex; align-items: center; justify-content: space-between; flex-wrap: wrap; gap: 6px; margin: 13px 0 16px; }
+.chk-lbl  { display: flex; align-items: center; gap: 7px; font-size: .77rem; color: var(--muted); cursor: pointer; user-select: none; }
+.chk-lbl input[type="checkbox"] { width: 15px; height: 15px; padding: 0; accent-color: var(--teal); cursor: pointer; }
+.forgot { font-size: .76rem; font-weight: 600; color: var(--teal); text-decoration: none; font-family: 'Source Sans 3', sans-serif; transition: color .15s; }
+.forgot:hover { color: var(--teal-d); text-decoration: underline; }
+
+/* ── BUTTONS ── */
+.btn-login {
+  width: 100%; padding: 12px; border: none; border-radius: 11px;
+  cursor: pointer; font-family: 'Hind Siliguri', sans-serif;
+  font-size: .96rem; font-weight: 700; letter-spacing: .3px;
+  display: flex; align-items: center; justify-content: center; gap: 8px;
+  transition: all .18s; position: relative; overflow: hidden;
+}
+.btn-login::after { content: ''; position: absolute; inset: 0; background: rgba(255,255,255,0); transition: background .15s; }
+.btn-login:hover::after { background: rgba(255,255,255,.12); }
+.btn-login:active   { transform: scale(.98); }
+.btn-login:disabled { opacity: .55; cursor: not-allowed; transform: none !important; }
+.btn-doctor { background: linear-gradient(135deg, var(--teal-d), var(--teal-m)); color: #fff; box-shadow: 0 4px 16px rgba(15,126,107,.3); }
+.btn-staff  { background: linear-gradient(135deg, #a06800, var(--accent)); color: #1a1200; box-shadow: 0 4px 16px rgba(240,165,0,.28); }
+
+.spinner {
+  display: none; width: 16px; height: 16px;
+  border: 2.5px solid rgba(255,255,255,.4); border-top-color: #fff;
+  border-radius: 50%; animation: spin .7s linear infinite; flex-shrink: 0;
+}
+.btn-staff .spinner { border-color: rgba(0,0,0,.2); border-top-color: #1a1200; }
+.loading .spinner { display: block; }
+.loading .btn-txt { display: none; }
+@keyframes spin { to { transform: rotate(360deg); } }
+
+/* ── SUCCESS OVERLAY ── */
+.success-panel {
+  display: none; flex-direction: column; align-items: center;
+  text-align: center; padding: 34px 24px 36px;
+  animation: slideUp .3s ease;
+}
+.success-panel.show { display: flex; }
+.success-ring {
+  width: 72px; height: 72px; border-radius: 50%;
+  background: #e8f5e9; border: 3px solid #4caf50;
+  display: flex; align-items: center; justify-content: center;
+  font-size: 2rem; margin-bottom: 14px;
+  animation: pop .4s cubic-bezier(.34,1.56,.64,1);
+}
+@keyframes pop { from { transform: scale(.3); opacity: 0; } to { transform: scale(1); opacity: 1; } }
+.success-panel h3 { font-size: 1.05rem; font-weight: 700; color: #2e7d32; }
+.success-panel p  { font-size: .8rem; color: var(--muted); margin-top: 6px; font-family: 'Source Sans 3', sans-serif; }
+.redirect-note {
+  margin-top: 14px; border-radius: 9px; padding: 10px 16px;
+  font-size: .8rem; font-weight: 600;
+  display: flex; align-items: center; gap: 6px;
+  width: 100%; justify-content: center;
+  border: 1.5px solid var(--border);
+}
+.redirect-note.doctor-note { background: var(--teal-l); color: var(--teal-d); }
+.redirect-note.staff-note  { background: #fff8e6;       color: #7a5500; border-color: #f5d882; }
+
+/* FIX: countdown number styled clearly */
+#cdNum {
+  display: inline-flex; align-items: center; justify-content: center;
+  width: 26px; height: 26px;
+  background: var(--teal); color: #fff;
+  border-radius: 50%; font-size: .85rem; font-weight: 800;
+  margin: 0 2px;
+  transition: transform .2s;
+}
+.redirect-note.staff-note #cdNum { background: #a06800; }
+
+/* ── CARD FOOTER ── */
+.card-foot {
+  background: #f6fdfb; border-top: 1.5px solid var(--border);
+  padding: 11px 20px 14px; text-align: center;
+  font-size: .7rem; color: var(--muted);
+  font-family: 'Source Sans 3', sans-serif; line-height: 1.6;
+}
+.card-foot strong { color: var(--teal-d); }
+
+/* ── TOAST ── */
+.toast {
+  position: fixed; bottom: 26px; left: 50%;
+  transform: translateX(-50%) translateY(16px);
+  background: var(--teal-d); color: #fff;
+  padding: 10px 20px; border-radius: 11px; font-size: .84rem;
+  z-index: 999; opacity: 0; pointer-events: none;
+  white-space: nowrap; max-width: calc(100vw - 28px);
+  text-align: center; transition: all .28s cubic-bezier(.34,1.3,.64,1);
+  box-shadow: 0 6px 20px rgba(0,0,0,.2);
+}
+.toast.show { opacity: 1; transform: translateX(-50%) translateY(0); }
+.toast.err  { background: var(--danger); }
+.toast.ok   { background: #2e7d32; }
+
+@media (max-width: 440px) {
+  .page  { padding: 16px 10px 44px; }
+  .panel { padding: 16px 14px 20px; }
+  .hero h1 { font-size: 1.22rem; }
+}
+</style>
+</head>
+<body>
+
+<!-- TOPBAR -->
+<div class="topbar">
+  <div class="tbar-left">
+    <div class="tbar-emblem">🏥</div>
+    <div class="tbar-brand">
+      <strong>Upasham Plus</strong>
+      <span>Healthcare Management</span>
+    </div>
+  </div>
+  <div class="tbar-pill">🔒 Secure Portal</div>
+</div>
+
+<div class="page">
+
+  <div class="hero">
+    <div class="hero-mark">🩺</div>
+    <h1>শহর থেকে গ্রামে,<br>ডাক্তার এখন কাছে</h1>
+    <p>Sign in to access your role dashboard</p>
+  </div>
+
+  <div class="card" id="card">
+
+    <!-- TABS -->
+    <div class="tabs">
+      <button class="tab active" id="tabDoc"   onclick="switchTab('doctor')"><span class="ico">🩺</span> Doctor Login</button>
+      <button class="tab"        id="tabStaff" onclick="switchTab('staff')"> <span class="ico">👤</span> Staff Login</button>
+    </div>
+
+    <!-- ════ DOCTOR PANEL ════ -->
+    <div class="panel active" id="panelDoc">
+      <div class="role-badge doctor">
+        <div class="role-badge-icon">🩺</div>
+        <div class="role-badge-text">
+          <strong>Doctor Interface</strong>
+          <span>Access the pharmacy intake &amp; prescription system</span>
+        </div>
+      </div>
+
+      <div class="sec-label">Login Credentials</div>
+
+      <div class="field">
+        <label class="lbl">🆔 Doctor ID (BMDC) <span class="opt">Optional</span></label>
+        <input type="text" id="dId" placeholder="e.g. A-12345" autocomplete="off"
+               oninput="this.value=this.value.toUpperCase(); clearErr('dId','dIdErr')">
+        <span class="vmsg" id="dIdErr">⚠ Format should be like A-12345</span>
+      </div>
+
+      <div class="field">
+        <label class="lbl">📧 Username / Email</label>
+        <input type="email" id="dEmail" placeholder="doctor@upashamplus.com" autocomplete="username"
+               oninput="clearErr('dEmail','dEmailErr')">
+        <span class="vmsg" id="dEmailErr">⚠ Enter a valid email address.</span>
+      </div>
+
+      <div class="field">
+        <label class="lbl">🔑 Password</label>
+        <div class="pw-wrap">
+          <input type="password" id="dPass" placeholder="Enter your password" autocomplete="current-password"
+                 oninput="clearErr('dPass','dPassErr')">
+          <button class="eye" onclick="toggleEye('dPass',this)" tabindex="-1">👁</button>
+        </div>
+        <span class="vmsg" id="dPassErr">⚠ Password is required.</span>
+      </div>
+
+      <div class="meta-row">
+        <label class="chk-lbl"><input type="checkbox" id="dRem"> Remember me</label>
+        <a href="#" class="forgot" onclick="return forgotPw()">Forgot password?</a>
+      </div>
+
+      <!-- FIX: onclick hardcodes the string 'doctor' — no variable, no detection logic -->
+      <button class="btn-login btn-doctor" id="btnDoc" onclick="doLogin('doctor')">
+        <div class="spinner"></div>
+        <span class="btn-txt">🔓 Login as Doctor</span>
+      </button>
+    </div>
+
+    <!-- ════ STAFF PANEL ════ -->
+    <div class="panel" id="panelStaff">
+      <div class="role-badge staff">
+        <div class="role-badge-icon">💊</div>
+        <div class="role-badge-text">
+          <strong>Staff Interface</strong>
+          <span>Access the medicine &amp; prescription management system</span>
+        </div>
+      </div>
+
+      <div class="sec-label">Login Credentials</div>
+
+      <div class="field">
+        <label class="lbl">📧 Username / Email</label>
+        <input type="email" id="sEmail" placeholder="staff@upashamplus.com" autocomplete="username"
+               oninput="clearErr('sEmail','sEmailErr')">
+        <span class="vmsg" id="sEmailErr">⚠ Enter a valid email address.</span>
+      </div>
+
+      <div class="field">
+        <label class="lbl">🔑 Password</label>
+        <div class="pw-wrap">
+          <input type="password" id="sPass" placeholder="Enter your password" autocomplete="current-password"
+                 oninput="clearErr('sPass','sPassErr')">
+          <button class="eye" onclick="toggleEye('sPass',this)" tabindex="-1">👁</button>
+        </div>
+        <span class="vmsg" id="sPassErr">⚠ Password is required.</span>
+      </div>
+
+      <div class="meta-row">
+        <label class="chk-lbl"><input type="checkbox" id="sRem"> Remember me</label>
+        <a href="#" class="forgot" onclick="return forgotPw()">Forgot password?</a>
+      </div>
+
+      <!-- FIX: onclick hardcodes the string 'staff' -->
+      <button class="btn-login btn-staff" id="btnStaff" onclick="doLogin('staff')">
+        <div class="spinner"></div>
+        <span class="btn-txt">🔓 Login as Staff</span>
+      </button>
+    </div>
+
+    <!-- ════ SUCCESS OVERLAY ════ -->
+    <!--
+      FIX: The success panel contains ONE stable <span id="cdNum">.
+           It is NEVER destroyed or recreated with innerHTML.
+           The countdown interval updates it directly by ID.
+           The redirect fires from inside the interval — not from
+           a separate function that could lose the role variable.
+    -->
+    <div class="success-panel" id="successPanel">
+      <div class="success-ring">✅</div>
+      <h3 id="successTitle">Login Successful!</h3>
+      <p id="successMsg">Redirecting to your dashboard…</p>
+      <div class="redirect-note doctor-note" id="redirectNote">
+        <span id="redirectLabel">🩺 Redirecting in</span>
+        <span id="cdNum">3</span>
+        <span>s…</span>
+      </div>
+    </div>
+
+    <div class="card-foot">
+      🔐 Encrypted &amp; secure &nbsp;|&nbsp; <strong>Upasham Plus</strong> v2.0<br>
+      <span style="opacity:.65;font-size:.64rem;">Unauthorized access is strictly prohibited.</span>
+    </div>
+
+  </div><!-- /card -->
+</div><!-- /page -->
+
+<div class="toast" id="toast"></div>
+
+<script>
+// ════════════════════════════════════════════════════════
+//  ROUTE TABLE
+//  FIX: destinations stored once — referenced by role key.
+//       Doctor  → upasham_pharmacy_intake01.html
+//       Staff   → button & medicine bug fix.html
+// ════════════════════════════════════════════════════════
+var ROUTES = {
+  doctor: 'upasham_pharmacy_intake01.html',
+  staff:  'button & medicine bug fix.html'
+};
+
+// ── Tab Switcher ──────────────────────────────────────
+function switchTab(role) {
+  var isDoc = (role === 'doctor');
+  document.getElementById('tabDoc').classList.toggle('active', isDoc);
+  document.getElementById('tabStaff').classList.toggle('active', !isDoc);
+  document.getElementById('panelDoc').classList.toggle('active', isDoc);
+  document.getElementById('panelStaff').classList.toggle('active', !isDoc);
+  document.getElementById('successPanel').classList.remove('show');
+}
+
+// ── Show/Hide Password ────────────────────────────────
+function toggleEye(id, btn) {
+  var inp = document.getElementById(id);
+  var hidden = (inp.type === 'password');
+  inp.type = hidden ? 'text' : 'password';
+  btn.textContent = hidden ? '🙈' : '👁';
+}
+
+// ── Validation ────────────────────────────────────────
+var emailRe = /^[^\s@]+@[^\s@]+\.[^\s@]+$/;
+var bmdcRe  = /^[A-Z]-\d{3,6}$/;
+
+function mark(inputId, msgId, bad) {
+  document.getElementById(inputId).classList.toggle('err', bad);
+  document.getElementById(msgId).classList.toggle('show', bad);
+}
+function clearErr(inputId, msgId) {
+  document.getElementById(inputId).classList.remove('err');
+  var m = msgId ? document.getElementById(msgId) : null;
+  if (m) m.classList.remove('show');
+}
+
+// ── Button loading state ──────────────────────────────
+function setLoading(btnId, state) {
+  var btn = document.getElementById(btnId);
+  btn.classList.toggle('loading', state);
+  btn.disabled = state;
+}
+
+// ════════════════════════════════════════════════════════
+//  doLogin(role)
+//
+//  FIX: role is always passed as a hardcoded string literal
+//  from the button's onclick attribute — 'doctor' or 'staff'.
+//  There is no tab-detection, no variable lookup, no way for
+//  the role to be undefined or wrong.
+//
+//  Each branch validates its own fields, then calls
+//  redirect() with the correct destination URL directly.
+// ════════════════════════════════════════════════════════
+function doLogin(role) {
+
+  // ── DOCTOR ───────────────────────────────────────────
+  if (role === 'doctor') {
+    var id    = document.getElementById('dId').value.trim();
+    var email = document.getElementById('dEmail').value.trim();
+    var pass  = document.getElementById('dPass').value;
+
+    var idOk    = (id === '') || bmdcRe.test(id);
+    var emailOk = emailRe.test(email);
+    var passOk  = pass.length > 0;
+
+    mark('dId',    'dIdErr',    !idOk);
+    mark('dEmail', 'dEmailErr', !emailOk);
+    mark('dPass',  'dPassErr',  !passOk);
+
+    if (!idOk || !emailOk || !passOk) {
+      toast('⚠ Please fill in all required fields correctly.', 'err');
+      return;
+    }
+
+    if (document.getElementById('dRem').checked) {
+      localStorage.setItem('up_doc_email', email);
+      if (id) localStorage.setItem('up_doc_id', id);
+    }
+
+    setLoading('btnDoc', true);
+
+    // FIX: after 1.4s loading animation, show success screen
+    //      then trigger countdown redirect to DOCTOR page
+    setTimeout(function() {
+      setLoading('btnDoc', false);
+      // FIX: pass role AND destination — no lookup inside showSuccess
+      showSuccessThenRedirect(
+        'doctor',
+        'Dr. ' + email.split('@')[0],
+        'Opening Pharmacy Intake system…',
+        '🩺 Redirecting to Doctor Interface in',
+        'doctor-note',
+        ROUTES['doctor']   // FIX: destination captured NOW, passed directly
+      );
+    }, 1400);
+
+    return; // FIX: explicit return — nothing else runs after this branch
+  }
+
+  // ── STAFF ────────────────────────────────────────────
+  if (role === 'staff') {
+    var email = document.getElementById('sEmail').value.trim();
+    var pass  = document.getElementById('sPass').value;
+
+    var emailOk = emailRe.test(email);
+    var passOk  = pass.length > 0;
+
+    mark('sEmail', 'sEmailErr', !emailOk);
+    mark('sPass',  'sPassErr',  !passOk);
+
+    if (!emailOk || !passOk) {
+      toast('⚠ Please fill in all required fields correctly.', 'err');
+      return;
+    }
+
+    if (document.getElementById('sRem').checked) {
+      localStorage.setItem('up_staff_email', email);
+    }
+
+    setLoading('btnStaff', true);
+
+    // FIX: pass role AND destination — same pattern as doctor branch
+    setTimeout(function() {
+      setLoading('btnStaff', false);
+      showSuccessThenRedirect(
+        'staff',
+        email.split('@')[0],
+        'Opening Staff Management system…',
+        '💊 Redirecting to Staff Interface in',
+        'staff-note',
+        ROUTES['staff']    // FIX: destination captured NOW, passed directly
+      );
+    }, 1400);
+
+    return; // FIX: explicit return
+  }
+}
+
+// ════════════════════════════════════════════════════════
+//  showSuccessThenRedirect(role, name, msg, label, noteClass, destination)
+//
+//  FIX: destination is a PARAMETER, not looked up from ROUTES
+//       inside this function. This eliminates any possibility
+//       of a wrong lookup at redirect time.
+//
+//  FIX: The countdown span #cdNum is NEVER recreated with
+//       innerHTML. It is updated with .textContent only.
+//       This means getElementById('cdNum') always finds the
+//       same element — no null-reference bugs.
+//
+//  FIX: window.location.href fires inside setInterval, not
+//       from a nested function that could close over a stale role.
+// ════════════════════════════════════════════════════════
+function showSuccessThenRedirect(role, name, subMsg, labelText, noteClass, destination) {
+
+  // Hide both form panels
+  document.getElementById('panelDoc').classList.remove('active');
+  document.getElementById('panelStaff').classList.remove('active');
+
+  // Populate text — using textContent only, never innerHTML
+  document.getElementById('successTitle').textContent  = (role === 'doctor' ? 'Doctor' : 'Staff') + ' Login Successful!';
+  document.getElementById('successMsg').textContent    = 'Welcome, ' + name + '. ' + subMsg;
+  document.getElementById('redirectLabel').textContent = labelText;
+  document.getElementById('cdNum').textContent         = '3';
+
+  // Set note colour class
+  var noteEl = document.getElementById('redirectNote');
+  noteEl.className = 'redirect-note ' + noteClass;
+
+  // Show overlay
+  document.getElementById('successPanel').classList.add('show');
+  toast('✅ Login successful! Redirecting…', 'ok');
+
+  // FIX: countdown — cdNum is found by ID each tick (stable element)
+  var secs = 3;
+
+  var tick = setInterval(function() {
+    secs = secs - 1;
+
+    var cdEl = document.getElementById('cdNum');  // always exists — never recreated
+    if (cdEl) cdEl.textContent = String(secs);
+
+    if (secs <= 0) {
+      clearInterval(tick);
+
+      // ════════════════════════════════════
+      // FIX: THE ACTUAL REDIRECT
+      // destination was passed in as a parameter and
+      // captured in this closure at call time.
+      // This line ALWAYS runs when secs hits 0.
+      // ════════════════════════════════════
+      window.location.href = destination;
+    }
+  }, 1000);
+}
+
+// ── Forgot Password ───────────────────────────────────
+function forgotPw() {
+  toast('📧 Password reset link will be sent to your registered email.', '');
+  return false;
+}
+
+// ── Toast ─────────────────────────────────────────────
+function toast(msg, type) {
+  var t = document.getElementById('toast');
+  t.textContent = msg;
+  t.className = 'toast' + (type ? ' ' + type : '');
+  void t.offsetWidth;
+  t.classList.add('show');
+  clearTimeout(t._tid);
+  t._tid = setTimeout(function() { t.classList.remove('show'); }, 3200);
+}
+
+// ── Enter key ─────────────────────────────────────────
+// FIX: checks which panel is .active and passes the matching
+//      literal string — same as the button's onclick
+document.addEventListener('keydown', function(e) {
+  if (e.key !== 'Enter') return;
+  var docActive = document.getElementById('panelDoc').classList.contains('active');
+  doLogin(docActive ? 'doctor' : 'staff');
+});
+
+// ── Restore remembered credentials ────────────────────
+document.addEventListener('DOMContentLoaded', function() {
+  var de = localStorage.getItem('up_doc_email');
+  var di = localStorage.getItem('up_doc_id');
+  var se = localStorage.getItem('up_staff_email');
+  if (de) { document.getElementById('dEmail').value = de; document.getElementById('dRem').checked = true; }
+  if (di)   document.getElementById('dId').value    = di;
+  if (se) { document.getElementById('sEmail').value = se; document.getElementById('sRem').checked = true; }
+});
+</script>
+</body>
+</html>
